@@ -1,27 +1,32 @@
 <!-- App.vue -->
 <template>
-  <div class="layout-view">
-    <LayoutHeader />
-    <div class="layout-content">
-      <div class="layout-list">
-        <NavMenu />
+  <div>
+    <div class="layout-view" v-if="isLayoutPage">
+      <!-- <LayoutHeader /> -->
+      <div class="layout-content">
+        <div class="layout-list">
+          <NavMenu />
+        </div>
+        <div class="page-view">
+          <!-- <PageHeader /> -->
+          <NavBar />
+          <router-view v-slot="{ Component, route }">
+            <KeepAlive :include="cachedViews.map((i) => i.name)" :max="5">
+              <component
+                :is="Component"
+                :key="resolveKey(route as any)"
+                v-if="shouldRefresh(route as any)"
+              />
+            </KeepAlive>
+          </router-view>
+          <!-- <PageBottom /> -->
+        </div>
       </div>
-      <div class="page-view">
-        <PageHeader />
-        <NavBar />
-        <router-view v-slot="{ Component, route }">
-          <KeepAlive :include="cachedViews.map((i) => i.name)" :max="5">
-            <component
-              :is="Component"
-              :key="resolveKey(route as any)"
-              v-if="shouldRefresh(route as any)"
-            />
-          </KeepAlive>
-        </router-view>
-        <PageBottom />
-      </div>
+      <!-- <LayoutBottom /> -->
     </div>
-    <LayoutBottom />
+    <div v-else>
+      <RouterView></RouterView>
+    </div>
   </div>
 </template>
 
@@ -33,10 +38,34 @@ import { type RouteRecordRaw } from 'vue-router'
 import { useCacheStore } from '@/stores/routeCache'
 import NavBar from './components/NavBar/NavBar.vue'
 import NavMenu from './components/NavMenu/NavMenu.vue'
-import PageBottom from './components/Layout/PageBottom.vue'
-import PageHeader from './components/Layout/PageHeader.vue'
-import LayoutHeader from './components/Layout/LayoutHeader.vue'
-import LayoutBottom from './components/Layout/LayoutBottom.vue'
+// import PageBottom from './components/Layout/PageBottom.vue'
+// import PageHeader from './components/Layout/PageHeader.vue'
+// import LayoutHeader from './components/Layout/LayoutHeader.vue'
+// import LayoutBottom from './components/Layout/LayoutBottom.vue'
+
+import { useRoute } from 'vue-router'
+import { ref, watch } from 'vue'
+
+const route = useRoute()
+
+const isLayoutPage = ref(false)
+
+watch(
+  () => route.meta,
+  () => {
+    if (Object.keys(route.meta).includes('layout')) {
+      isLayoutPage.value = route.meta.layout as boolean
+    } else {
+      isLayoutPage.value = true
+    }
+    if (route.meta?.title) {
+      document.title = route.meta.title as string
+    } else {
+      document.title = '项目名称'
+    }
+  },
+  { deep: true },
+)
 
 const cacheStore = useCacheStore()
 const { cachedViews } = storeToRefs(cacheStore)
@@ -59,47 +88,14 @@ const shouldRefresh = (route: RouteRecordRaw) => {
 }
 
 .layout-content {
+  min-height: 100vh;
   display: flex;
   gap: 4px;
 }
 
 .layout-list {
   flex-shrink: 0;
-}
-
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
+  height: 100vh;
 }
 
 @media (min-width: 1024px) {

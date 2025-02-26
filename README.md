@@ -38,11 +38,19 @@ npm run build
 npm run lint
 ```
 
+// 注意项
+
+1. keepAlive
+   需在router/index.ts->meta属性增加keepAlive: true、
+   以及页面文件script增加 defineOptions({ name: RouteName.xxx })
+   才会生效
+
 // todo
 
 <!-- // keep-alive 导航栏 -->
+<!-- // 左侧路由列表   -->
+<!-- // 公共组件 上传 -->
 
-// 左侧路由列表  
-// 公共组件 上传
 // axios 封装
 // 环境变量
+// 动态路由

@@ -1,15 +1,18 @@
 import { defineStore } from 'pinia'
 import { nextTick, ref } from 'vue'
+
 import { type RouteRecordRaw } from 'vue-router'
+import { type cachedViewsItem } from './config'
 
 export const useCacheStore = defineStore('cache', () => {
   const curRouteName = ref('')
-  const cachedViews = ref<{ name: string; key: string }[]>([])
+  const cachedViews = ref<cachedViewsItem[]>([])
   const refreshMap = ref(new Map())
 
   const addView = (route: RouteRecordRaw) => {
     const name = route.name as string
     const key = generateKey(route) as string
+    const title = (route.meta?.title || '') as string
     const index = cachedViews.value.findIndex((i) => {
       return i.name === name
     })
@@ -18,6 +21,7 @@ export const useCacheStore = defineStore('cache', () => {
       cachedViews.value.push({
         name,
         key,
+        title,
       })
     } else {
       cachedViews.value[index].key = key
