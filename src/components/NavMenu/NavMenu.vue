@@ -2,8 +2,10 @@
   <div class="nav-menu">
     <!-- <div>customHeader</div> -->
     <div @click="toggleFlag = !toggleFlag" class="menu-icon">
-      <el-icon v-if="toggleFlag"><Expand /></el-icon>
-      <el-icon v-else><Fold /></el-icon>
+      <el-icon>
+        <Expand v-if="toggleFlag" />
+        <Fold v-else />
+      </el-icon>
     </div>
     <el-menu
       class="el-menu-vertical-demo"
