@@ -16,7 +16,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
 import { type MenuItem } from './config'
 import { IconMap } from './config'
 
