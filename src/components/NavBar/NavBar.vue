@@ -6,30 +6,33 @@
         <Fold v-else />
       </el-icon>
     </div>
-
-    <div class="nav-content">
-      <div
-        v-for="item in showViewsList"
-        :key="item.key"
-        @mouseenter="hoverKey = item.name"
-        @mouseleave="hoverKey = ''"
-        :class="hoverKey === item.name ? 'route-hover content-item' : 'content-item'"
-      >
-        <div
-          @click="jumpUrl(item)"
-          :class="curRouteName === item.name ? 'menu-item active-menu-item' : 'menu-item'"
-        >
-          {{ item.title }}
-          <el-icon
-            @mouseenter="iconHoverKey = item.name"
-            @mouseleave="iconHoverKey = ''"
-            :class="iconHoverKey === item.name ? 'icon-hover' : ''"
-            v-if="item.key !== RouteName.Home"
-            @click.stop="deleteRoute(item)"
-            ><Close
-          /></el-icon>
+    <div class="nav-content-wrapper">
+      <el-scrollbar wrap-style="display: flex;align-items:center">
+        <div class="nav-content">
+          <div
+            v-for="item in showViewsList"
+            :key="item.key"
+            @mouseenter="hoverKey = item.name"
+            @mouseleave="hoverKey = ''"
+            :class="hoverKey === item.name ? 'route-hover content-item' : 'content-item'"
+          >
+            <div
+              @click="jumpUrl(item)"
+              :class="curRouteName === item.name ? 'menu-item active-menu-item' : 'menu-item'"
+            >
+              {{ item.title }}
+              <el-icon
+                @mouseenter="iconHoverKey = item.name"
+                @mouseleave="iconHoverKey = ''"
+                :class="iconHoverKey === item.name ? 'icon-hover' : ''"
+                v-if="item.key !== RouteName.Home"
+                @click.stop="deleteRoute(item)"
+                ><Close
+              /></el-icon>
+            </div>
+          </div>
         </div>
-      </div>
+      </el-scrollbar>
     </div>
 
     <div class="nav-options">
@@ -121,13 +124,15 @@ const deleteRoute = (item: cachedViewsItem) => {
   border: 1px solid rgb(239, 239, 245);
 }
 
-.nav-content {
+.nav-content-wrapper {
   flex: 1;
+  height: 100%;
+}
+
+.nav-content {
   display: flex;
-  padding: 10px;
+  align-items: center;
   gap: 4px;
-  overflow-y: scroll;
-  -webkit-mask: linear-gradient(red, red) 0 0/100% calc(100% - 10px) no-repeat;
 }
 
 .nav-options {
