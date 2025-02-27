@@ -3,7 +3,7 @@
   <el-input v-model="value"></el-input>
 </template>
 <script lang="ts" setup>
-import { RouteName } from '@/router/index.ts'
+import { RouteName } from '@/router/config.ts'
 import { ref, onMounted } from 'vue'
 import { TestAPI } from '@/api/test'
 

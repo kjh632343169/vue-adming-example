@@ -22,6 +22,7 @@ export const useCacheStore = defineStore('cache', () => {
         name,
         key,
         title,
+        scrollTop: 0,
       })
     } else {
       cachedViews.value[index].key = key
@@ -30,6 +31,15 @@ export const useCacheStore = defineStore('cache', () => {
 
   const setCurRouteName = (name: string) => {
     curRouteName.value = name
+  }
+
+  const setScrollTop = (route: RouteRecordRaw) => {
+    const key = generateKey(route) as string
+    const index = cachedViews.value.findIndex((i) => i.key === key)
+    if (index > -1) {
+      const scrollContainer = document.querySelector('.page-view-content')
+      cachedViews.value[index].scrollTop = scrollContainer?.scrollTop || 0
+    }
   }
 
   const generateKey = (route: RouteRecordRaw) => {
@@ -62,5 +72,6 @@ export const useCacheStore = defineStore('cache', () => {
     shouldReload,
     triggerReload,
     setCurRouteName,
+    setScrollTop,
   }
 })

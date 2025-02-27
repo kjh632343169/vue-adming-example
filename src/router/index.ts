@@ -4,15 +4,7 @@ import { useCacheStore } from '@/stores/routeCache'
 import { useUserStore } from '@/stores/userStore'
 
 import { TestAPI } from '@/api/test'
-
-enum RouteName {
-  Home = 'Home',
-  Product = 'Product',
-  Login = 'Login',
-  TestPageA = 'TestPageA',
-  TestPageB = 'TestPageB',
-  TestPageC = 'TestPageC',
-}
+import { RouteName } from './config'
 
 const routes = [
   {
@@ -114,15 +106,19 @@ const router = createRouter({
   routes,
 })
 
+//  该方法可自行调整内容
 const loopRoute = (dataList: any[], routeList: any[]) => {
   dataList.forEach((item) => {
-    let route = {
+    const route = {
       redirect: item.redirect || '',
       path: item.path,
       name: item.name,
-      component: item.component ? () => import(item.component) : null,
       meta: item.meta,
       children: [],
+      component: null as any,
+    }
+    if (item.component) {
+      route.component = () => import(/* @vite-ignore */ item.component)
     }
     if (item.children && item.children.length) {
       loopRoute(item.children, route.children)
@@ -135,31 +131,37 @@ router.beforeEach(async (to, from, next) => {
   const cacheStore = useCacheStore()
   const userStore = useUserStore()
   cacheStore.setCurRouteName(to.name as string)
+  let isGetNext = false
 
   if (!userStore.checkIsMenuLoaded()) {
-    const data = await TestAPI.getUserMenu() // 请求后端接口
-    console.log(data)
-    const routeList = [] as any[]
-    loopRoute(data, routeList)
-    console.log(routeList)
-    routeList.map((i) => {
-      router.addRoute(i)
-    })
-    userStore.setMenuLoaded(data)
-    next({ ...to, replace: true }) // 重定向确保路由生效
+    try {
+      const data = await TestAPI.getUserMenu() // 请求后端接口
+      const routeList = [] as any[]
+      loopRoute(data, routeList)
+      routeList.map((i) => {
+        router.addRoute(i)
+      })
+      isGetNext = true
+      userStore.setMenuLoaded(data) // 设置左侧菜单内容
+      next({ ...to, replace: true }) // 重定向确保路由生效
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   // 自动添加缓存
   if (to.meta.keepAlive) {
     cacheStore.addView(to as never)
   }
+  cacheStore.setScrollTop(from as never)
   // 处理需要刷新的路由
   if (from.meta.refreshOnLeave) {
     cacheStore.triggerReload(cacheStore.generateKey(from as never) as never)
   }
-  next()
+
+  if (!isGetNext) next()
 })
 
 export default router
 
-export { RouteName, routes }
+export { routes }

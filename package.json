@@ -8,7 +8,6 @@
     "dev:build": "vite --mode production",
     "build:dev": "vite build --mode development",
     "build:": "vite build --mode production",
-    // "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",

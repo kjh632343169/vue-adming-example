@@ -60,6 +60,7 @@ service.interceptors.response.use(
     // hideLoading()
     const { code, data, message, id } = response.data as ResponseData
 
+    //  可自定义业务数据正常返回结构和内容
     if (code === 200 || id) return response.data
     else {
       ElMessage.error(message || '请求错误')
@@ -90,6 +91,7 @@ async function request<T = any>(
     const result = await service.request<any, T>({
       url,
       ...config,
+      // 自定义请求头内容
       headers: {
         Authorization: `Bearer ${''}`,
         Timestamp: Date.now(),

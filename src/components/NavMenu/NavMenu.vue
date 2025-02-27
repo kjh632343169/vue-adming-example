@@ -1,17 +1,14 @@
 <template>
   <div class="nav-menu">
-    <!-- <div>customHeader</div> -->
-    <div @click="toggleFlag = !toggleFlag" class="menu-icon">
-      <el-icon>
-        <Expand v-if="toggleFlag" />
-        <Fold v-else />
-      </el-icon>
+    <div class="nav-menu-header">
+      <el-icon size="18"><ElementPlus /></el-icon>
+      <span v-if="!toggleMenu">润农科技</span>
     </div>
     <el-menu
-      class="el-menu-vertical-demo"
+      class="nav-menu-content"
       @open="handleOpen"
       @close="handleClose"
-      :collapse="toggleFlag"
+      :collapse="toggleMenu"
       :default-active="curRouteName"
       router
     >
@@ -21,7 +18,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import RecursiveMenu from './RecursiveMenu.vue'
@@ -32,9 +28,7 @@ const cacheStore = useCacheStore()
 const userStore = useUserStore()
 
 const { curRouteName } = storeToRefs(cacheStore)
-const { menuList } = storeToRefs(userStore)
-
-const toggleFlag = ref(false)
+const { menuList, toggleMenu } = storeToRefs(userStore)
 
 const handleOpen = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
@@ -45,9 +39,17 @@ const handleClose = (key: string, keyPath: string[]) => {
 </script>
 
 <style scoped>
+.nav-menu-header {
+  height: 60px;
+  border-bottom: 1px solid rgb(239, 239, 245);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
 .nav-menu {
   background: #fff;
-  padding-top: 10px;
   height: 100%;
 }
 

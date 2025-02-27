@@ -9,16 +9,21 @@
         </div>
         <div class="page-view">
           <!-- <PageHeader /> -->
-          <NavBar />
-          <router-view v-slot="{ Component, route }">
-            <KeepAlive :include="cachedViews.map((i) => i.name)" :max="5">
-              <component
-                :is="Component"
-                :key="resolveKey(route as any)"
-                v-if="shouldRefresh(route as any)"
-              />
-            </KeepAlive>
-          </router-view>
+          <div class="page-view-bar">
+            <NavBar />
+          </div>
+          <div class="page-view-content">
+            <router-view v-slot="{ Component, route }">
+              <KeepAlive :include="cachedViews.map((i) => i.name)" :max="10">
+                <component
+                  :is="Component"
+                  :key="resolveKey(route as any)"
+                  v-if="shouldRefresh(route as any)"
+                />
+              </KeepAlive>
+            </router-view>
+          </div>
+
           <!-- <PageBottom /> -->
         </div>
       </div>
@@ -44,14 +49,17 @@ import NavMenu from './components/NavMenu/NavMenu.vue'
 // import LayoutBottom from './components/Layout/LayoutBottom.vue'
 
 import { useRoute } from 'vue-router'
-import { ref, watch } from 'vue'
+import { ref, watch, nextTick } from 'vue'
 
 const route = useRoute()
 
 const isLayoutPage = ref(false)
 
+const cacheStore = useCacheStore()
+const { cachedViews } = storeToRefs(cacheStore)
+
 watch(
-  () => route.meta,
+  () => route,
   () => {
     if (Object.keys(route.meta).includes('layout')) {
       isLayoutPage.value = route.meta.layout as boolean
@@ -63,12 +71,18 @@ watch(
     } else {
       document.title = '项目名称'
     }
+
+    const key = cacheStore.generateKey(route as never)
+    const item = cachedViews.value.find((i) => i.key === key)
+    if (item && item.scrollTop > 0) {
+      nextTick(() => {
+        const scrollContainer = document.querySelector('.page-view-content')
+        scrollContainer?.scrollTo(0, item.scrollTop)
+      })
+    }
   },
   { deep: true },
 )
-
-const cacheStore = useCacheStore()
-const { cachedViews } = storeToRefs(cacheStore)
 
 // 动态生成缓存 Key
 const resolveKey = (route: RouteRecordRaw) => {
@@ -82,15 +96,30 @@ const shouldRefresh = (route: RouteRecordRaw) => {
 </script>
 
 <style scoped>
+.layout-content {
+  height: 100vh;
+  display: flex;
+}
+
 .page-view {
   flex: 1;
   min-width: 1024px;
+  display: flex;
+  flex-direction: column;
 }
 
-.layout-content {
-  min-height: 100vh;
-  display: flex;
-  gap: 4px;
+.page-view-bar {
+  flex-shrink: 0;
+}
+
+.page-view-content {
+  flex: 1;
+  height: 100%;
+  margin: 12px;
+  padding: 24px;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: auto;
 }
 
 .layout-list {

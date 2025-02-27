@@ -1,31 +1,39 @@
 <template>
   <div class="nav-wrap">
-    <div v-for="item in showViewsList" :key="item.key">
-      <el-button
-        v-if="curRouteName === item.name"
-        type="primary"
+    <div class="nav-icon">
+      <el-icon @click="toggleMenu = !toggleMenu" size="18">
+        <Expand v-if="toggleMenu" />
+        <Fold v-else />
+      </el-icon>
+    </div>
+
+    <div class="nav-content">
+      <div
+        v-for="item in showViewsList"
+        :key="item.key"
         @mouseenter="hoverKey = item.name"
         @mouseleave="hoverKey = ''"
+        :class="hoverKey === item.name ? 'route-hover content-item' : 'content-item'"
       >
-        <div class="btn-wrap">
+        <div
+          @click="jumpUrl(item)"
+          :class="curRouteName === item.name ? 'menu-item active-menu-item' : 'menu-item'"
+        >
           {{ item.title }}
-          <el-icon v-if="hoverKey === item.name && hoverKey !== 'Home'" @click="deleteRoute(item)"
+          <el-icon
+            @mouseenter="iconHoverKey = item.name"
+            @mouseleave="iconHoverKey = ''"
+            :class="iconHoverKey === item.name ? 'icon-hover' : ''"
+            v-if="item.key !== RouteName.Home"
+            @click.stop="deleteRoute(item)"
             ><Close
           /></el-icon>
         </div>
-      </el-button>
-      <el-button
-        v-else
-        @click="jumpUrl(item)"
-        @mouseenter="hoverKey = item.name"
-        @mouseleave="hoverKey = ''"
-        ><div class="btn-wrap">
-          {{ item.title }}
-          <el-icon v-if="hoverKey === item.name && hoverKey !== 'Home'" @click="deleteRoute(item)"
-            ><Close
-          /></el-icon>
-        </div>
-      </el-button>
+      </div>
+    </div>
+
+    <div class="nav-options">
+      <NavBarOptions />
     </div>
   </div>
 </template>
@@ -38,9 +46,11 @@ import _ from 'lodash'
 
 import { type cachedViewsItem } from '@/stores/config'
 
-import { RouteName } from '@/router/index'
+import { RouteName } from '@/router/config'
 import { useCacheStore } from '@/stores/routeCache'
-import { Close } from '@element-plus/icons-vue'
+import { useUserStore } from '@/stores/userStore'
+
+import NavBarOptions from './NavBarOptions.vue'
 
 // 默认展示
 const DefaultRouteList = [
@@ -48,18 +58,24 @@ const DefaultRouteList = [
     key: RouteName.Home,
     name: RouteName.Home,
     title: '首页',
+    scrollTop: 0,
   },
 ]
 
 const router = useRouter()
 
 const cacheStore = useCacheStore()
+const userStore = useUserStore()
 const { cachedViews, curRouteName } = storeToRefs(cacheStore)
+const { toggleMenu } = storeToRefs(userStore)
 
 const hoverKey = ref('')
+const iconHoverKey = ref('')
 
 const showViewsList = computed(() => {
-  return _.unionWith(DefaultRouteList, cachedViews.value, _.isEqual)
+  return _.unionWith(DefaultRouteList, cachedViews.value, (val, val2) => {
+    return val.key === val2.key
+  })
 })
 
 const jumpUrl = (item: cachedViewsItem) => {
@@ -77,6 +93,8 @@ const jumpUrl = (item: cachedViewsItem) => {
 
 const deleteRoute = (item: cachedViewsItem) => {
   cacheStore.removeView(item.name)
+  hoverKey.value = ''
+  iconHoverKey.value = ''
   const latelyItem = cachedViews.value[cachedViews.value.length - 1] || DefaultRouteList[0]
   jumpUrl(latelyItem)
 }
@@ -86,14 +104,67 @@ const deleteRoute = (item: cachedViewsItem) => {
 .nav-wrap {
   display: flex;
   gap: 6px;
-  padding: 8px;
   background-color: #fff;
   border-radius: 4px;
+  align-items: center;
+  height: 60px;
 }
 
-.btn-wrap {
+.nav-icon {
+  flex-shrink: 0;
+  height: 100%;
   display: flex;
   align-items: center;
-  gap: 3px;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0 15px;
+  border: 1px solid rgb(239, 239, 245);
+}
+
+.nav-content {
+  flex: 1;
+  display: flex;
+  padding: 10px;
+  gap: 4px;
+  overflow-y: scroll;
+  -webkit-mask: linear-gradient(red, red) 0 0/100% calc(100% - 10px) no-repeat;
+}
+
+.nav-options {
+  height: 100%;
+  flex-shrink: 0;
+}
+
+.content-item {
+  flex-shrink: 0;
+}
+
+.menu-item {
+  height: 36px;
+  border: 1px solid rgb(239, 239, 245);
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 14px;
+  cursor: pointer;
+  gap: 6px;
+  font-weight: 500;
+}
+
+.route-hover > .menu-item {
+  border-color: #409eff;
+  color: #409eff;
+  background-color: rgb(235.9, 245.3, 255);
+}
+
+.active-menu-item {
+  border-color: #409eff;
+  color: #409eff;
+}
+
+.icon-hover {
+  border-radius: 50%;
+  background-color: #fff;
 }
 </style>

@@ -8,6 +8,7 @@ export const useUserStore = defineStore('user', () => {
   const token = ref('')
   const isMenuLoaded = ref(false)
   const menuList = ref<MenuItem[]>([])
+  const toggleMenu = ref(false)
 
   const checkIsMenuLoaded = () => {
     return isMenuLoaded.value
@@ -37,5 +38,5 @@ export const useUserStore = defineStore('user', () => {
     })
   }
 
-  return { token, menuList, checkIsMenuLoaded, setMenuLoaded }
+  return { token, menuList, toggleMenu, checkIsMenuLoaded, setMenuLoaded }
 })
