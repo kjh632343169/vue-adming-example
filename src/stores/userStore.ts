@@ -4,7 +4,7 @@ import { defineStore } from 'pinia'
 import { type MenuItem } from '@/components/NavMenu/config'
 import type { RouteRecordRaw } from 'vue-router'
 
-import { StorageType, removeLocalStorage } from '@/utils/stroage'
+import { StorageType, removeLocalStorage } from '@/utils/storage'
 
 export const useUserStore = defineStore('user', () => {
   const token = ref('')

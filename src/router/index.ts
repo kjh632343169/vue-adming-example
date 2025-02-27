@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { StorageType, setLocalStorage } from '@/utils/storage'
 
 import { useCacheStore } from '@/stores/routeCache'
 import { useUserStore } from '@/stores/userStore'
@@ -135,7 +136,13 @@ router.beforeEach(async (to, from, next) => {
 
   if (!userStore.checkIsMenuLoaded()) {
     try {
-      const data = await TestAPI.getUserMenu() // 请求后端接口
+      //  add 单点登录逻辑
+      const token = to.query.token || ''
+      if (token) {
+        setLocalStorage(StorageType.Token, token)
+      }
+
+      const data = await TestAPI.getUserMenu() // 请求后端菜单接口
       const routeList = [] as any[]
       loopRoute(data, routeList)
       routeList.map((i) => {
