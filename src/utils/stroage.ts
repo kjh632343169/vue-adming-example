@@ -1,5 +1,5 @@
 export enum StorageType {
-  Token = 'Token', // 登录 token
+  Token = 'token', // 登录 token
 }
 
 export const getLocalStorage = (str: StorageType) => {

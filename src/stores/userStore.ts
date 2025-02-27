@@ -4,6 +4,8 @@ import { defineStore } from 'pinia'
 import { type MenuItem } from '@/components/NavMenu/config'
 import type { RouteRecordRaw } from 'vue-router'
 
+import { StorageType, removeLocalStorage } from '@/utils/stroage'
+
 export const useUserStore = defineStore('user', () => {
   const token = ref('')
   const isMenuLoaded = ref(false)
@@ -38,5 +40,10 @@ export const useUserStore = defineStore('user', () => {
     })
   }
 
-  return { token, menuList, toggleMenu, checkIsMenuLoaded, setMenuLoaded }
+  const logout = () => {
+    console.log('退出登录逻辑')
+    removeLocalStorage(StorageType.Token)
+  }
+
+  return { token, menuList, toggleMenu, checkIsMenuLoaded, setMenuLoaded, logout }
 })

@@ -138,6 +138,7 @@ const deleteRoute = (item: cachedViewsItem) => {
 .nav-options {
   height: 100%;
   flex-shrink: 0;
+  margin: 0 20px;
 }
 
 .content-item {
