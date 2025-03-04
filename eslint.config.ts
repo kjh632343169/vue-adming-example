@@ -28,7 +28,7 @@ export default defineConfigWithVueTs(
   },
   // TypeScript 规则
   {
-    files: ['src/**/**/*.{ts,mts,tsx}', 'src/**/*.{ts,mts,tsx}'],
+    files: ['src/**/**/*.{ts,mts,tsx,vue}', 'src/**/*.{ts,mts,tsx,vue}'],
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': 'error',
