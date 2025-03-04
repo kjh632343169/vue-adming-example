@@ -32,7 +32,7 @@ interface Props {
   tableParam?: {
     [key: string]: any
   }
-  columnsKey?: ColumnsType
+  columnsKey: ColumnsType
   total: number
   pageSize?: number
   multipleSelection?: any[]
@@ -64,5 +64,6 @@ const pageChange = (currentPage: number, pageSize: number) => {
 
 defineExpose({
   tableRef,
+  multipleSelectionList,
 })
 </script>

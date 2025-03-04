@@ -14,12 +14,17 @@
       </el-table-column>
     </template>
   </CustomTable>
+  <el-input v-model="testValue"></el-input>
 </template>
 
 <script lang="ts" setup>
+import { RouteName } from '@/router/config.ts'
+defineOptions({ name: RouteName.TestPageB })
 import { ref } from 'vue'
 import CustomTable from '@/components/CustomTable/CustomTable.vue'
 import { ColumnsType } from '@/components/CustomTable/config'
+
+const testValue = ref('')
 
 const testData = ref([
   {
