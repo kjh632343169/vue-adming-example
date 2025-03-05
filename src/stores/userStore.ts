@@ -11,6 +11,11 @@ export const useUserStore = defineStore('user', () => {
   const isMenuLoaded = ref(false)
   const menuList = ref<MenuItem[]>([])
   const toggleMenu = ref(false)
+  const buttonPermissions = ref<string[]>([]) // 按钮权限列表
+
+  const hasPermission = (val: string) => {
+    return buttonPermissions.value.includes(val)
+  }
 
   const checkIsMenuLoaded = () => {
     return isMenuLoaded.value
@@ -45,5 +50,14 @@ export const useUserStore = defineStore('user', () => {
     removeLocalStorage(StorageType.Token)
   }
 
-  return { token, menuList, toggleMenu, checkIsMenuLoaded, setMenuLoaded, logout }
+  return {
+    token,
+    menuList,
+    toggleMenu,
+    buttonPermissions,
+    checkIsMenuLoaded,
+    setMenuLoaded,
+    logout,
+    hasPermission,
+  }
 })

@@ -1,4 +1,5 @@
 <template>
+  <CustomSearch :searchConfig="searchConfig" />
   <CustomTable
     :data="testData"
     :columnsKey="ColumnsType.Test"
@@ -15,14 +16,51 @@
     </template>
   </CustomTable>
   <el-input v-model="testValue"></el-input>
+  <div v-has="'admin'">admin</div>
+  <div v-has="'test'">Test</div>
 </template>
 
 <script lang="ts" setup>
 import { RouteName } from '@/router/config.ts'
-defineOptions({ name: RouteName.TestPageB })
 import { ref } from 'vue'
 import CustomTable from '@/components/CustomTable/CustomTable.vue'
+import CustomSearch from '@/components/CustomSearch/CustomSearch.vue'
 import { ColumnsType } from '@/components/CustomTable/config'
+
+defineOptions({ name: RouteName.TestPageB })
+
+const searchConfig = ref([
+  {
+    type: 'input',
+    label: '姓名',
+    prop: 'name',
+  },
+  {
+    type: 'input',
+    label: '姓名',
+    prop: 'name1',
+  },
+  {
+    type: 'input',
+    label: '姓名',
+    prop: 'name2',
+  },
+  {
+    type: 'input',
+    label: '姓名',
+    prop: 'name3',
+  },
+  {
+    type: 'input',
+    label: '姓名姓名行',
+    prop: 'name4',
+  },
+  {
+    type: 'date',
+    label: '时间',
+    prop: 'name5',
+  },
+])
 
 const testValue = ref('')
 
