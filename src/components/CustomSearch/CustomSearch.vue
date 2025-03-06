@@ -1,7 +1,12 @@
 <template>
   <div ref="searchRef" class="search-container">
-    <el-form :model="formData" ref="formRef" inline label-position="right">
-      <el-form-item v-for="item in searchConfig" :key="item.prop" :label="item.label">
+    <el-form ref="formRef" :model="formData" inline label-position="right">
+      <el-form-item
+        v-for="item in searchConfig"
+        :key="item.prop"
+        :label="item.label"
+        :prop="item.prop"
+      >
         <!-- 动态组件渲染 -->
         <component
           :is="getComponentType(item.type as ComponentType)"
@@ -15,6 +20,7 @@
       <el-form-item class="option-item" label=" ">
         <el-button @click="queryData" type="primary">查询</el-button>
         <el-button @click="clearData">重置</el-button>
+        <el-button v-if="!hideExport" @click="exportData">导出</el-button>
         <!-- 自定义操作按钮 -->
         <slot name="custom"></slot>
       </el-form-item>
@@ -38,9 +44,10 @@ interface SearchItem {
 
 const props = defineProps({
   searchConfig: { type: Array as PropType<SearchItem[]>, required: true },
+  hideExport: { type: Boolean, default: false },
 })
 
-const emit = defineEmits(['query', 'clear'])
+const emit = defineEmits(['query', 'clear', 'export'])
 
 const getFormData = () => {
   const defaultFormData = {} as any
@@ -64,6 +71,10 @@ const clearData = () => {
 
 const queryData = () => {
   emit('query', formData.value)
+}
+
+const exportData = () => {
+  emit('export', formData.value)
 }
 
 onMounted(() => {
