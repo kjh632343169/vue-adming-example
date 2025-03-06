@@ -110,16 +110,21 @@ const router = createRouter({
 //  该方法可自行调整内容
 const loopRoute = (dataList: any[], routeList: any[]) => {
   dataList.forEach((item) => {
+    const redirect = item.children?.[0]?.router || ''
     const route = {
-      redirect: item.redirect || '',
-      path: item.path,
-      name: item.name,
-      meta: item.meta,
+      redirect: redirect ? '/' + redirect : '',
+      path: item.router ? '/' + item.router : '',
+      name: item.target || '',
+      meta: {
+        keepAlive: true,
+        icon: item.icon,
+        title: item.name || '',
+      },
       children: [],
       component: null as any,
     }
-    if (item.component) {
-      route.component = () => import(/* @vite-ignore */ item.component)
+    if (item.router) {
+      route.component = () => import(/* @vite-ignore */ '../views/' + item.router + '/index.vue')
     }
     if (item.children && item.children.length) {
       loopRoute(item.children, route.children)
