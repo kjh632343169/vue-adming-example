@@ -44,6 +44,10 @@ const TestTableColumns: ColumnItem[] = [
     label: 'Address+22121212',
     useDynamicSlot: true,
   },
+  {
+    prop: 'test',
+    label: 'testData',
+  },
 ]
 
 export enum ColumnsType {

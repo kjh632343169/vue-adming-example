@@ -81,13 +81,17 @@ onMounted(() => {
   observer = new ResizeObserver((entries) => {
     for (const entry of entries) {
       const { width } = entry.contentRect
-      const len = Math.floor(width / 310)
+      const len = Math.floor(width / 330)
       const formLength = props.searchConfig.length + 1
       let arr = []
       if (formLength <= len) {
         arr = new Array(len - formLength).fill('1')
       } else {
-        arr = new Array(len - (formLength % len)).fill('1')
+        if (formLength % len === 0) {
+          arr = []
+        } else {
+          arr = new Array(len - (formLength % len)).fill('1')
+        }
       }
       if (arr.length === placeholderArr.value.length) {
         return
@@ -110,7 +114,7 @@ onUnmounted(() => {
 }
 
 :deep(.el-form-item) {
-  min-width: 310px !important;
+  width: 330px !important;
   margin-right: 0px !important;
 }
 

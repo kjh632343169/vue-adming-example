@@ -2,7 +2,7 @@
   <div class="nav-menu">
     <div class="nav-menu-header">
       <el-icon size="18"><ElementPlus /></el-icon>
-      <span v-if="!toggleMenu">润农科技</span>
+      <span v-if="changeToggleMenu">润农科技</span>
     </div>
     <el-menu
       class="nav-menu-content"
@@ -23,12 +23,27 @@ import { storeToRefs } from 'pinia'
 import RecursiveMenu from './RecursiveMenu.vue'
 import { useCacheStore } from '@/stores/routeCache'
 import { useUserStore } from '@/stores/userStore'
+import { ref, watch } from 'vue'
 
 const cacheStore = useCacheStore()
 const userStore = useUserStore()
 
 const { curRouteName } = storeToRefs(cacheStore)
 const { menuList, toggleMenu } = storeToRefs(userStore)
+const changeToggleMenu = ref(true)
+
+watch(
+  () => toggleMenu.value,
+  () => {
+    if (toggleMenu.value) {
+      changeToggleMenu.value = false
+    } else {
+      setTimeout(() => {
+        changeToggleMenu.value = true
+      }, 300)
+    }
+  },
+)
 
 const handleOpen = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
