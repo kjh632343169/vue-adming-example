@@ -2,7 +2,7 @@
   <CustomSearch :searchConfig="searchConfig" />
   <CustomTable
     :data="testData"
-    :columnsKey="ColumnsType.Test"
+    :columnsKey="ColumnsType.AcquisitionRecord"
     :total="100"
     @tableSelectChange="tableSelectChange"
     ref="customTable"
@@ -28,24 +28,29 @@ defineOptions({ name: RouteName.AcquisitionRecord })
 
 const searchConfig = ref([
   {
-    type: 'input',
-    label: '事件类型',
-    prop: 'type',
-  },
-  {
     type: 'date',
-    label: '事件日期',
+    label: '记录日期',
     prop: 'date',
     options: {
-      type: 'datetimerange',
+      type: 'daterange',
     },
   },
   {
-    type: 'date',
-    label: '事件日期',
-    prop: 'date2',
+    type: 'input',
+    label: '提交用户',
+    prop: 'user',
+  },
+  {
+    type: 'select',
+    label: '表单',
+    prop: 'form',
     options: {
-      type: 'daterange',
+      optionsList: [
+        {
+          label: '默认表单',
+          value: '1',
+        },
+      ],
     },
   },
 ])
@@ -54,26 +59,26 @@ const testData = ref([
   {
     date: '2016-05-03',
     name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-    test: '222',
+    ear: 'No. 189, Grove St, Los Angeles',
+    eleEar: '222',
   },
   {
     date: '2016-05-02',
     name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-    test: '222',
+    ear: 'No. 189, Grove St, Los Angeles',
+    eleEar: '222',
   },
   {
     date: '2016-05-04',
     name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-    test: '222',
+    ear: 'No. 189, Grove St, Los Angeles',
+    eleEar: '222',
   },
   {
     date: '2016-05-01',
     name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-    test: '222',
+    ear: 'No. 189, Grove St, Los Angeles',
+    eleEar: '222',
   },
 ])
 

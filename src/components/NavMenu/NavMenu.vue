@@ -2,7 +2,7 @@
   <div class="nav-menu">
     <div class="nav-menu-header">
       <el-icon size="18"><ElementPlus /></el-icon>
-      <span v-if="changeToggleMenu">润农科技</span>
+      <span v-if="changeToggleMenu">表型数据平台</span>
     </div>
     <el-menu
       class="nav-menu-content"

@@ -9,9 +9,11 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     CustomSearch: typeof import('./src/components/CustomSearch/CustomSearch.vue')['default']
+    CustomSelect: typeof import('./src/components/CustomSearch/CustomSelect.vue')['default']
     CustomTable: typeof import('./src/components/CustomTable/CustomTable.vue')['default']
     CustomUpload: typeof import('./src/components/CustomUpload/CustomUpload.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElCard: typeof import('element-plus/es')['ElCard']
     ElDropdown: typeof import('element-plus/es')['ElDropdown']
     ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
     ElDropdownMenu: typeof import('element-plus/es')['ElDropdownMenu']
@@ -21,8 +23,11 @@ declare module 'vue' {
     ElInput: typeof import('element-plus/es')['ElInput']
     ElMenu: typeof import('element-plus/es')['ElMenu']
     ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
+    ElOption: typeof import('element-plus/es')['ElOption']
+    ElOptions: typeof import('element-plus/es')['ElOptions']
     ElPagination: typeof import('element-plus/es')['ElPagination']
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
+    ElSelect: typeof import('element-plus/es')['ElSelect']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
@@ -42,5 +47,6 @@ declare module 'vue' {
     RecursiveMenu: typeof import('./src/components/NavMenu/RecursiveMenu.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Select: typeof import('./src/components/CustomSearch/Select.vue')['default']
   }
 }
